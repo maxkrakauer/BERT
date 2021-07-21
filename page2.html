@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.intro {
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+      $("#submitSentence").click(function(){
+        //var arr = ["dogs","cats"];
+        var arr = ($("#sentence").val()).split(" ");
+        for(var i=0; i<arr.length; i++){
+            var opt = document.createElement("option");
+            opt.setAttribute("value",arr[i]);
+            var textnode = document.createTextNode(arr[i]);         // Create a text node
+            opt.appendChild(textnode); 
+            $("#cars").append(opt);
+        }
+      });
+      $("#submitMask").click(function(){
+          var textnode = $("#cars").val();
+          $("p").append(textnode);
+      });
+    
+    });
+
+    
+
+    </script>
+</head>
+<body>
+
+<h1>The select form attribute</h1>
+
+<p>The second form attribute specifies which form the drop-down list belongs to:</p>
+
+
+  <label for="fname">Insert a sentence:</label>
+  <input type="text" id="sentence" name="fname">
+  <button id="submitSentence">submit</button>
+
+<br>
+<br>
+
+<div>
+<label class="intro" for="cars">Choose a car:</label>
+<select class="intro" id="cars" name="carlist" form="carform">
+</select>
+<button id="submitMask">submit</button>
+</div>
+
+<p></p>
+<p>The drop-down list is defined outside the form element, but will be submitted with the form.</p>
+
+<script>
+    /*
+var list = document.getElementsByClassName("intro");
+for(let i=0; i<list.length;i++)
+list[i].style.visibility = "hidden";
+*/
+/*
+var arr = ["dogs","cats"];
+var list = document.getElementById("cars");
+
+function fill_mask_options(arr){
+    for(i=0; i<arr.length; i++){
+        var opt = document.createElement("option");
+        opt.setAttribute("value","lala");
+        opt.innerText("lala");
+        list.appendChild(opt);
+    }
+}
+*/
+</script>
+
+</body>
+</html>
