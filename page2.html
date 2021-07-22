@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+* {
+  box-sizing: border-box;
+}
+
 .intro {
 }
 
@@ -22,7 +27,7 @@ body {
 
 .left {
   left: 0;
-  background-color: #111;
+  background-color: #6dfd6d;
 }
 
 .right {
@@ -42,6 +47,41 @@ body {
   width: 150px;
   border-radius: 50%;
 }
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 200px; /* Should be removed. Only for demonstration */
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+
+.button {
+  background-color: #4c8baf;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  height: 100px
+}
+
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
@@ -73,6 +113,8 @@ body {
   <div class="split right">
     <div class="centered">
 
+        <button class="button">Load Model</button>
+
 <h1>The select form attribute</h1>
 
 <p>The second form attribute specifies which form the drop-down list belongs to:</p>
@@ -95,9 +137,27 @@ body {
 <p></p>
 <p>The drop-down list is defined outside the form element, but will be submitted with the form.</p>
 
+<div class="row">
+    <div class="column" style="background-color:#aaa;">
+      <h2>Column 1</h2>
+      <p>Some text..</p>
+    </div>
+    <div class="column" style="background-color:#bbb;">
+      <h2>Column 2</h2>
+      <p>Some text..</p>
+    </div>
+  </div>
+
 </div>
 </div>
 
+<div class="split left">
+    <div class="centered">
+
+        <button class="button">Do Fine-tuning</button>
+
+    </div>
+</div>
 <script>
     /*
 var list = document.getElementsByClassName("intro");
