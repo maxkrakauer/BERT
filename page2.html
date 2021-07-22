@@ -52,7 +52,7 @@ body {
   float: left;
   width: 50%;
   padding: 10px;
-  height: 200px; /* Should be removed. Only for demonstration */
+  height: 250px; /* Should be removed. Only for demonstration */
 }
 
 .row:after {
@@ -86,9 +86,19 @@ body {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function(){
+      $("#sentences").hide();
+      $("#loadButton").click(function () {
+        $("#loadButton").hide();
+        $("#sentences").show();
+        $("#suggestions").hide();
+      });
       $("#submitSentence").click(function(){
         //var arr = ["dogs","cats"];
-        var arr = ($("#sentence").val()).split(" ");
+        var sentence = ($("#sentence").val());
+        sentence = sentence.replace(/[^a-zA-Z ]/g, "");
+        arr= sentence.split(" ");
+        //arr = arr.replace(/[^a-zA-Z ]/g, "");
+        $("#cars").empty();
         for(var i=0; i<arr.length; i++){
             var opt = document.createElement("option");
             opt.setAttribute("value",arr[i]);
@@ -96,10 +106,12 @@ body {
             opt.appendChild(textnode); 
             $("#cars").append(opt);
         }
+
       });
       $("#submitMask").click(function(){
           var textnode = $("#cars").val();
-          $("p").append(textnode);
+          $("#mask_example").append(textnode);
+          $("#suggestions").show();
       });
     
     });
@@ -113,11 +125,11 @@ body {
   <div class="split right">
     <div class="centered">
 
-        <button class="button">Load Model</button>
+        <button class="button" id="loadButton">Load Model</button>
 
-<h1>The select form attribute</h1>
+        <div id="sentences">
 
-<p>The second form attribute specifies which form the drop-down list belongs to:</p>
+<h1>Welcome</h1>
 
 
   <label for="fname">Insert a sentence:</label>
@@ -134,18 +146,29 @@ body {
 <button id="submitMask">submit</button>
 </div>
 
-<p></p>
-<p>The drop-down list is defined outside the form element, but will be submitted with the form.</p>
+<p id="mask_example"></p>
 
-<div class="row">
-    <div class="column" style="background-color:#aaa;">
-      <h2>Column 1</h2>
-      <p>Some text..</p>
+
+
+<div class="row" id="suggestions">
+    <div class="column" style="background-color:rgb(170, 170, 170);">
+      <h5>Suggestions</h5>
+      <p>played</p>
+      <p>sat</p>
+      <p>drove</p>
+      <p>toyed</p>
+      <p>ate</p>
     </div>
-    <div class="column" style="background-color:#bbb;">
-      <h2>Column 2</h2>
-      <p>Some text..</p>
+    <div class="column" style="background-color:rgb(170, 170, 170);">
+     <h5>Probabilities</h5>
+      <p>.3</p>
+      <p>.04</p>
+      <p>.004</p>
+      <p>.00005</p>
+      <p>.000003</p>
     </div>
+  </div>
+
   </div>
 
 </div>
