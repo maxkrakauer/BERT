@@ -10,7 +10,9 @@ logging.basicConfig(level=logging.INFO)
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 sentence = sys.argv[1]
 mask = sys.argv[2]
-text = '[CLS]' + sentence + ' . [SEP]'
+sentence = sentence.replace(mask, '[MASK]')
+print(sentence)
+text = '[CLS] ' + sentence + ' . [SEP]'
 tokenized_text = tokenizer.tokenize(text)
 indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
 
@@ -29,7 +31,7 @@ model.eval()
 with torch.no_grad():
     predictions = model(tokens_tensor, segments_tensors)
 
-masked_index = tokenized_text.index(mask)
+masked_index = tokenized_text.index('[MASK]')
 
 predicted_sorted = torch.argsort(predictions[0, masked_index], descending=True)
 topres = tokenizer.convert_ids_to_tokens([x.item() for x in predicted_sorted[:5]])
