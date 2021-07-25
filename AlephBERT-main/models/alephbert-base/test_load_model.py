@@ -1,7 +1,7 @@
-from transformers import BertModel, BertTokenizerFast
+from transformers import BertForMaskedLM, BertTokenizerFast
 
 alephbert_tokenizer = BertTokenizerFast.from_pretrained('onlplab/alephbert-base')
-alephbert = BertModel.from_pretrained('onlplab/alephbert-base')
+alephbert = BertForMaskedLM.from_pretrained('onlplab/alephbert-base')
 # if not finetuning - disable dropout
 
 
@@ -26,11 +26,11 @@ alephbert.eval()
 
 # Predict all tokens
 with torch.no_grad():
-    predictions = alephbert(tokens_tensor, segments_tensors)['last_hidden_state']
+    predictions = alephbert(tokens_tensor, segments_tensors)
 
 masked_index = tokenized_text.index('[MASK]')
 
-predicted_index = torch.argmax(predictions[0,masked_index]).item()
+predicted_index = torch.argmax(predictions[0][0,masked_index]).item()
 
 predicted_sorted = torch.argsort(predictions[0, masked_index], descending=True)
 
