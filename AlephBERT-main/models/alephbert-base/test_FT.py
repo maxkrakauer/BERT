@@ -5,7 +5,9 @@ alephbert_tokenizer = BertTokenizerFast.from_pretrained('onlplab/alephbert-base'
 import pickle
 import torch
 
-torch.device('cpu')
+torch.device('cuda')
+print(torch.cuda.device_count())
+
 
 class CPU_Unpickler(pickle.Unpickler):
     def find_class(self, module, name):
