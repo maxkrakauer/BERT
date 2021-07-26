@@ -42,8 +42,29 @@ with torch.no_grad():
     predictions = alephbert(tokens_tensor, segments_tensors)
 
 masked_index = tokenized_text.index('[MASK]')
+num_of_res = 10
 
 predicted_sorted = torch.argsort(predictions[0][0, masked_index], descending=True)
+topres = alephbert_tokenizer.convert_ids_to_tokens([x.item() for x in predicted_sorted[:num_of_res]])
+
+def probs_from_predictions(predictions):
+    min_prediction = -predictions[0][0, masked_index][predicted_sorted[-1]]
+    sum_of_predictions = torch.sum(predictions[0][0, masked_index])
+    return (predictions[0][0, masked_index] + min_prediction) / (sum_of_predictions + min_prediction * len(predicted_sorted))
+
+probs = probs_from_predictions(predictions)
+
+sum_of_probs = torch.sum(probs)
+assert(abs(sum_of_probs - 1) < 0.00001)
+
+top_probs = torch.tensor([probs[alephbert_tokenizer.convert_tokens_to_ids([res])[0]].item() for res in topres])
+sum_of_top = torch.sum(top_probs)
+
+relative_probs = top_probs / sum_of_top
+# nice_probs = [('{:.5f}'.format(x.item())) for x in relative_probs]
+
+with_prob = list(zip(topres, relative_probs.tolist()))
 
 
-print(alephbert_tokenizer.convert_ids_to_tokens([token.item() for token in predicted_sorted[:20]]))
+
+print(with_prob)
