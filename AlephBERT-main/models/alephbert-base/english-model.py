@@ -32,9 +32,10 @@ with torch.no_grad():
     predictions = model(tokens_tensor, segments_tensors)
 
 masked_index = tokenized_text.index('[MASK]')
+num_of_res = 10
 
 predicted_sorted = torch.argsort(predictions[0][0, masked_index], descending=True)
-topres = tokenizer.convert_ids_to_tokens([x.item() for x in predicted_sorted[:5]])
+topres = tokenizer.convert_ids_to_tokens([x.item() for x in predicted_sorted[:num_of_res]])
 
 def probs_from_predictions(predictions):
     min_prediction = -predictions[0][0, masked_index][predicted_sorted[-1]]
@@ -46,7 +47,14 @@ probs = probs_from_predictions(predictions)
 sum_of_probs = torch.sum(probs)
 assert(abs(sum_of_probs - 1) < 0.00001)
 
-nice_probs = ['{:.7f}'.format(x.item()) for x in probs]
+top_probs = torch.tensor([probs[tokenizer.convert_tokens_to_ids([res])[0]].item() for res in topres])
+sum_of_top = torch.sum(top_probs)
 
-with_prob = [(res, nice_probs[tokenizer.convert_tokens_to_ids([res])[0]]) for res in topres]
+relative_probs = top_probs / sum_of_top
+# nice_probs = [('{:.5f}'.format(x.item())) for x in relative_probs]
+
+with_prob = list(zip(topres, relative_probs.tolist()))
+
+
+
 print(with_prob)

@@ -18,29 +18,57 @@ app.use('/', router);
 app.get("/api", (req, res) => {
   res.json({ message: ans });
 });
+app.get("/heb", (req, res) => {
+  res.json({ message: ans });
+});
+app.get("/en", (req, res) => {
+  res.json({ message: ans });
+});
 
-app.post("/", (req, res) => {
-  const body = req.body;
-  const text = body.text;
-  const mask = body.mask;
-  console.log('working on: ' + text)
-  console.log('with mask: ' + mask)
-  ans = 'loading...';
-  const scriptPath = '../AlephBERT-main/models/alephbert-base/english-model.py'
+const execute_bert = (lang, text, mask, res)=>{
+  var scriptPath = '';
+  if(lang === 'en'){
+    scriptPath = '../AlephBERT-main/models/alephbert-base/english-model.py'
+  }
+  else if(lang === 'heb'){
+    scriptPath = '../AlephBERT-main/models/alephbert-base/hebrew-model.py'
+  }
   const pyshell = new PythonShell.PythonShell(scriptPath, { args: [text, mask] })
   pyshell.on('message', (output) => {
-    ans = output
     console.log('result:' + output)
+    ans = output;
+    res.send({response: ans});
+    return output
 
   })
   pyshell.end((err) => {
     if (err) {
       throw err;
     }
-    res.send({response: ans});
   })
+  return 'somthing went wrong...';
+}
 
+app.post("/heb", (req, res) => {
+  const body = req.body;
+  const text = body.text;
+  const mask = body.mask;
+  console.log('working on: ' + text)
+  console.log('with mask: ' + mask)
+  ans = 'loading...';
+  ans = execute_bert('heb', text, mask, res)
+  return ans
+})
 
+app.post("/en", (req, res) => {
+  const body = req.body;
+  const text = body.text;
+  const mask = body.mask;
+  console.log('working on: ' + text)
+  console.log('with mask: ' + mask)
+  ans = 'loading...';
+  ans = execute_bert('en', text, mask, res)
+  return ans;
 })
 
 app.listen(PORT, () => {
