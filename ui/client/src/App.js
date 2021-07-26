@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import myOutput from './components/Output';
 function App() {
   const [sentence, setSentence] = useState('An Example sentence to work with');
-  const [mask, setMask] = useState(sentence[0])
+  const [mask, setMask] = useState(sentence.split(' ')[0])
   const [result, setResult] = useState(null)
-
+  const[answered, setAnswered] = useState(true)
 
   useEffect(() => {
     fetch("/api")
@@ -15,6 +15,8 @@ function App() {
   }, [])
   const post = async () => {
     console.log("before fetch");
+    setAnswered(false)
+    setResult('loading...')
     const res = await fetch('/', {
       method: 'POST',
       headers: {
@@ -29,6 +31,7 @@ function App() {
     console.log("after fetch");
     const data = await res.json();
     setResult(data.response)
+    setAnswered(true)
   }
   return (
     <div className="App">
@@ -64,7 +67,7 @@ function App() {
           }
         </select>
 
-        <input type="submit" />
+        <input type="submit" style={{display: answered? 'block': 'none'}} />
         <h1>{ result }</h1>
       </form>
 
