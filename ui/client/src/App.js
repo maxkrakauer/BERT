@@ -1,6 +1,7 @@
 import './App.css';
-import { useState, useEffect } from 'react';
-import SentenceCopletionForm from './components/SentenceCopletionForm';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import SentenceCompletionForm from './components/SentenceCompletionForm';
 function App() {
   
 
@@ -9,8 +10,8 @@ function App() {
       <header className="App-header">
         Welcome to our app!
       </header>
-      <SentenceCopletionForm lang='heb'/>
-      <SentenceCopletionForm lang='en'></SentenceCopletionForm>
+      <SentenceCompletionForm lang='heb'/>
+      <SentenceCompletionForm lang='en'/>
     </div>
   );
 }

@@ -51,9 +51,9 @@ top_probs = torch.tensor([probs[tokenizer.convert_tokens_to_ids([res])[0]].item(
 sum_of_top = torch.sum(top_probs)
 
 relative_probs = top_probs / sum_of_top
-# nice_probs = [('{:.5f}'.format(x.item())) for x in relative_probs]
+nice_probs = [('{:.5f}'.format(x.item())) for x in relative_probs]
 
-with_prob = list(zip(topres, relative_probs.tolist()))
+with_prob = list(zip(topres, nice_probs))
 
 
 
