@@ -7,10 +7,9 @@ logging.basicConfig(level=logging.INFO)
 
 # Load pre-trained model tokenizer (vocabulary)
 tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
-sentence = "i love you"
-mask = "love"
-# sentence = sys.argv[1]
-# mask = sys.argv[2]
+
+sentence = sys.argv[1]
+mask = sys.argv[2]
 sentence = sentence.replace(mask, '[MASK]')
 # print(sentence)
 text = '[CLS] ' + sentence + ' . [SEP]'
