@@ -1,5 +1,6 @@
 import torch, sys
 from transformers import BertTokenizerFast, BertForMaskedLM
+import json
 
 # OPTIONAL: if you want to have more information on what's happening, activate the logger as follows
 import logging
@@ -8,8 +9,10 @@ logging.basicConfig(level=logging.INFO)
 # Load pre-trained model tokenizer (vocabulary)
 tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
 
-sentence = sys.argv[1]
-mask = sys.argv[2]
+sentence = "hi how are you"
+mask = 'hi'
+# sentence = sys.argv[1]
+# mask = sys.argv[2]
 sentence = sentence.replace(mask, '[MASK]')
 # print(sentence)
 text = '[CLS] ' + sentence + ' . [SEP]'
@@ -51,10 +54,10 @@ top_probs = torch.tensor([probs[tokenizer.convert_tokens_to_ids([res])[0]].item(
 sum_of_top = torch.sum(top_probs)
 
 relative_probs = top_probs / sum_of_top
-nice_probs = [('{:.5f}'.format(x.item())) for x in relative_probs]
+# nice_probs = [('{:.5f}'.format(x.item())) for x in relative_probs]
 
-with_prob = list(zip(topres, nice_probs))
-
-
-
-print(with_prob)
+with_prob = list(zip(topres, relative_probs.tolist()))
+# as_dicts = []
+# for (w,p) in with_prob:
+#     as_dicts.append({'word': w, 'prob': p})
+print(json.dumps(with_prob))

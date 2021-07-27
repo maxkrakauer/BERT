@@ -1,3 +1,4 @@
+import json
 from transformers import BertForMaskedLM, BertTokenizerFast
 import torch
 import pickle
@@ -61,9 +62,10 @@ top_probs = torch.tensor([probs[alephbert_tokenizer.convert_tokens_to_ids([res])
 sum_of_top = torch.sum(top_probs)
 
 relative_probs = top_probs / sum_of_top
-nice_probs = [('{:.5f}'.format(x.item())) for x in relative_probs]
 
-with_prob = list(zip(topres, nice_probs))
+with_prob = list(zip(topres, relative_probs.tolist()))
 
-
-print(with_prob)
+# as_dicts = []
+# for (w,p) in with_prob:
+#     as_dicts.append({'word': w, 'prob': p})
+print(json.dumps(with_prob))

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, InputGroup, Spinner } from "react-bootstrap";
+import Results from "./Results";
 
 function SentenceCompletionForm({ lang }) {
   const example =
@@ -8,19 +9,18 @@ function SentenceCompletionForm({ lang }) {
       : "An Example sentence to work with";
   const [sentence, setSentence] = useState(example);
   const [mask, setMask] = useState(sentence.split(" ")[0]);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState({ default: "" });
   const [answered, setAnswered] = useState(true);
 
-  useEffect(() => {
-    fetch("/" + lang)
-      .then((res) => res.json())
-      .then((data) => setResult(data.message));
-  }, [lang]);
+  const label_for_mask = (
+    <InputGroup.Text>
+      {lang === "en" ? "MASK word:" : ":מילת מיסוך"}
+    </InputGroup.Text>
+  );
 
   const post = async (lang) => {
     console.log("before fetch");
     setAnswered(false);
-    setResult(lang === "heb" ? "אנא המתן" : "loading...");
     const res = await fetch("/" + lang, {
       method: "POST",
       headers: {
@@ -34,13 +34,13 @@ function SentenceCompletionForm({ lang }) {
     });
     console.log("after fetch");
     setAnswered(true);
-    console.log(res);
-    const data = await res.json();
-    setResult(data.response);
+
+    const as_json = await res.json();
+    const content = as_json.response;
+    setResult(JSON.parse(content));
   };
   return (
     <div className="App">
-      <h1>{lang === "heb" ? "השלמת משפט" : "Sentence Completion"}</h1>
       <iframe
         title="dummy"
         name="dummyframe"
@@ -52,42 +52,51 @@ function SentenceCompletionForm({ lang }) {
         id="sentence-completion-form"
         onSubmit={() => post(lang)}
       >
-        <label htmlFor="fname">Sentence:</label>
-        <input
-          className="Main-text-input"
-          type="text"
-          name="textbox"
-          value={sentence}
-          style={{ width: "50%" }}
-          onChange={(e) => setSentence(e.target.value)}
-        />
-        <br />
-        <label htmlFor="masks">Choose a MASK word:</label>
-        <Form.Select
-          style={{ width: "auto", display: "inline-block" }}
-          className="Mask-list-select"
-          id="masks"
-          name="masklist"
-          onChange={(e) => setMask(e.target.value)}
-        >
-          {sentence.split(" ").map((word, index) => (
-            <option key={index} value={word}>
-              {word}
-            </option>
-          ))}
-        </Form.Select>
-        <fieldset disabled={!answered}>
-          <Button
-            className="btn btn-primary"
-            type="submit"
-            value={lang === "heb" ? "אישור" : "Submit"}
-            disabled={!answered}
-          >
-            {lang === "heb" ? "אישור" : "Submit"}
-          </Button>
-        </fieldset>
-        <br />
-        <textarea defaultValue={result}>{result}</textarea>
+        <Form.Group className="mb-3">
+          <Form.Label>{lang === "en" ? "Sentence" : "משפט"}:</Form.Label>
+          <Form.Control
+            className="Main-text-input"
+            type="text"
+            name="textbox"
+            value={sentence}
+            onChange={(e) => {
+              setSentence(e.target.value);
+              setMask(e.target.value.split(" ")[0]);
+            }}
+          />
+          <br />
+          <InputGroup className="mb-3">
+            {lang === "en" ? label_for_mask : null}
+            <Form.Select
+              style={{ width: "auto", display: "inline-block" }}
+              className="Mask-list-select"
+              id="masks"
+              name="masklist"
+              onChange={(e) => setMask(e.target.value)}
+            >
+              {sentence.split(" ").map((word, index) => (
+                <option key={index} value={word}>
+                  {word}
+                </option>
+              ))}
+            </Form.Select>
+
+            {lang === "heb" ? label_for_mask : null}
+          </InputGroup>
+          <fieldset disabled={!answered}>
+            <Button
+              className="btn btn-primary"
+              type="submit"
+              value={lang === "heb" ? "אישור" : "Submit"}
+              disabled={!answered}
+            >
+              {lang === "heb" ? "אישור" : "Submit"}
+            </Button>
+          </fieldset>
+          {answered ? <br /> : <Spinner animation="border" variant="primary" />}
+
+          <Results json={result} />
+        </Form.Group>
       </Form>
     </div>
   );

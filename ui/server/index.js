@@ -17,10 +17,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', router);
 
 app.get("/heb", (req, res) => {
-  res.json({ message: ans_heb });
+  res.json({ message: {ans_heb} });
 });
 app.get("/en", (req, res) => {
-  res.json({ message: ans_en });
+  res.json({ message: {ans_en} });
 });
 
 const execute_bert = (lang, text, mask, res)=>{
