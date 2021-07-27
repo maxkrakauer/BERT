@@ -14,10 +14,10 @@ function App() {
       <Container>
         <Row>
           <Col>
-            <h1>Sentence Completion</h1>
+            <h1 style={{color: 'darkgray'}}>Sentence Completion</h1>
           </Col>
           <Col>
-            <h1>השלמת משפט</h1>
+            <h1 style={{color: 'darkgray'}}>השלמת משפט</h1>
           </Col>
         </Row>
         <Row>

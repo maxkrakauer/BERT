@@ -11,10 +11,16 @@ function SentenceCompletionForm({ lang }) {
   const [mask, setMask] = useState(sentence.split(" ")[0]);
   const [result, setResult] = useState({ default: "" });
   const [answered, setAnswered] = useState(true);
+  const [original, setOriginal] = useState(false);
 
   const label_for_mask = (
     <InputGroup.Text className="bg-dark" style={{ color: "darkgray" }}>
       {lang === "en" ? "MASK word:" : ":מילת מיסוך"}
+    </InputGroup.Text>
+  );
+  const label_for_sentence = (
+    <InputGroup.Text className="bg-dark" style={{ color: "darkgray" }}>
+      {lang === "en" ? "Sentence:" : ":משפט"}
     </InputGroup.Text>
   );
 
@@ -30,6 +36,7 @@ function SentenceCompletionForm({ lang }) {
       body: JSON.stringify({
         text: sentence,
         mask: mask,
+        original: original,
       }),
     });
     console.log("after fetch");
@@ -53,18 +60,22 @@ function SentenceCompletionForm({ lang }) {
         onSubmit={() => post(lang)}
       >
         <Form.Group className="mb-3">
-          <Form.Label>{lang === "en" ? "Sentence" : "משפט"}:</Form.Label>
-          <Form.Control
-            className="Main-text-input bg-dark"
-            type="text"
-            name="textbox"
-            value={sentence}
-            onChange={(e) => {
-              setSentence(e.target.value);
-              setMask(e.target.value.split(" ")[0]);
-            }}
-            style={{ color: "white" }}
-          />
+          <InputGroup className="mb-3">
+            {lang === "en" ? label_for_sentence : null}
+
+            <Form.Control
+              className="Main-text-input bg-dark"
+              type="text"
+              name="textbox"
+              value={sentence}
+              onChange={(e) => {
+                setSentence(e.target.value);
+                setMask(e.target.value.split(" ")[0]);
+              }}
+              style={{ color: "white" }}
+            />
+            {lang === "heb" ? label_for_sentence : null}
+          </InputGroup>
           <br />
           <InputGroup className="mb-3">
             {lang === "en" ? label_for_mask : null}
@@ -84,17 +95,31 @@ function SentenceCompletionForm({ lang }) {
 
             {lang === "heb" ? label_for_mask : null}
           </InputGroup>
-          <fieldset disabled={!answered}>
+          <fieldset disabled={!answered} style={{ display: "inline-block" }}>
+            <Form.Check
+              type="checkbox"
+              label={lang === "en" ? "Use Original Model" : "מודל מקורי"}
+              style={{ color: "darkgray", display: "block" }}
+              onClick={() => setOriginal(!original)}
+            />
             <Button
               className="btn btn-primary"
               type="submit"
               value={lang === "heb" ? "אישור" : "Submit"}
-              disabled={!answered}
+              style={{ marginBottom: "30px" }}
             >
               {lang === "heb" ? "אישור" : "Submit"}
             </Button>
+            {answered ? (
+              <br />
+            ) : (
+              <Spinner
+                animation="border"
+                variant="primary"
+                style={{ margin: "10px" }}
+              />
+            )}
           </fieldset>
-          {answered ? <br /> : <Spinner animation="border" variant="primary" />}
 
           <Results json={result} />
         </Form.Group>

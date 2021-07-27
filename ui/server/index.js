@@ -57,6 +57,7 @@ app.post("/heb", (req, res) => {
   const body = req.body;
   const text = body.text;
   const mask = body.mask;
+  const original = body.original
   console.log('working on: ' + text)
   console.log('with mask: ' + mask)
   ans_heb = 'loading...';
