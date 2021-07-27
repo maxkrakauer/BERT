@@ -7,7 +7,7 @@ function App() {
   
 
   return (
-    <div className="App">
+    <div className="App bg-dark">
       <header className="App-header">
         Welcome to our app!
       </header>

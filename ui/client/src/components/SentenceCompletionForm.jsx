@@ -13,7 +13,7 @@ function SentenceCompletionForm({ lang }) {
   const [answered, setAnswered] = useState(true);
 
   const label_for_mask = (
-    <InputGroup.Text>
+    <InputGroup.Text className="bg-dark" style={{ color: "darkgray" }}>
       {lang === "en" ? "MASK word:" : ":מילת מיסוך"}
     </InputGroup.Text>
   );
@@ -55,7 +55,7 @@ function SentenceCompletionForm({ lang }) {
         <Form.Group className="mb-3">
           <Form.Label>{lang === "en" ? "Sentence" : "משפט"}:</Form.Label>
           <Form.Control
-            className="Main-text-input"
+            className="Main-text-input bg-dark"
             type="text"
             name="textbox"
             value={sentence}
@@ -63,13 +63,14 @@ function SentenceCompletionForm({ lang }) {
               setSentence(e.target.value);
               setMask(e.target.value.split(" ")[0]);
             }}
+            style={{ color: "white" }}
           />
           <br />
           <InputGroup className="mb-3">
             {lang === "en" ? label_for_mask : null}
             <Form.Select
-              style={{ width: "auto", display: "inline-block" }}
-              className="Mask-list-select"
+              className="bg-dark"
+              style={{ width: "auto", display: "inline-block", color: "white" }}
               id="masks"
               name="masklist"
               onChange={(e) => setMask(e.target.value)}
