@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Form, InputGroup, Spinner } from "react-bootstrap";
 import Results from "./Results";
-
+import MyCheckbox from "./MyCheckbox";
 function SentenceCompletionForm({ lang }) {
   const example =
     lang === "heb"
@@ -96,12 +96,13 @@ function SentenceCompletionForm({ lang }) {
             {lang === "heb" ? label_for_mask : null}
           </InputGroup>
           <fieldset disabled={!answered} style={{ display: "inline-block" }}>
-            <Form.Check
-              type="checkbox"
-              label={lang === "en" ? "Use Original Model" : "מודל מקורי"}
-              style={{ color: "darkgray", display: "block" }}
-              onClick={() => setOriginal(!original)}
-            />
+            
+            {lang === "heb" ? (
+              <MyCheckbox
+                setOriginal={setOriginal}
+                original={original}
+              ></MyCheckbox>
+            ) : null}
             <Button
               className="btn btn-primary"
               type="submit"
