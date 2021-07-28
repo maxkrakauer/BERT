@@ -16,14 +16,22 @@ class CPU_Unpickler(pickle.Unpickler):
             return super().find_class(module, name)
 
 
-alephbert_tokenizer = BertTokenizerFast.from_pretrained(
-    'onlplab/alephbert-base')
-alephbert = CPU_Unpickler(
-    open('../AlephBERT-main/models/myFirstTune/tune_2.pkl', 'rb')).load()
-# alephbert = CPU_Unpickler(open('../../models/myFirstTune/tune_2.pkl', 'rb')).load()
-
 text = sys.argv[1]
 mask = sys.argv[2]
+original = sys.argv[3]
+
+alephbert_tokenizer = BertTokenizerFast.from_pretrained(
+    'onlplab/alephbert-base')
+
+if original == "true":
+    alephbert = BertForMaskedLM.from_pretrained('onlplab/alephbert-base')
+else:
+    alephbert = CPU_Unpickler(
+            open('../AlephBERT-main/models/myFirstTune/tune_2.pkl', 'rb')).load()
+
+# alephbert = CPU_Unpickler(open('../../models/myFirstTune/tune_2.pkl', 'rb')).load()
+
+#print("after alephbert model loading")
 
 text = text.replace(mask, '[MASK]')
 hebrew_text = '[CLS] ' + text + ' . [SEP]'

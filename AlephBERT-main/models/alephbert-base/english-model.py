@@ -12,6 +12,7 @@ tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
 
 sentence = sys.argv[1]
 mask = sys.argv[2]
+#original = sys.argv[3]
 sentence = sentence.replace(mask, '[MASK]')
 # print(sentence)
 text = '[CLS] ' + sentence + ' . [SEP]'

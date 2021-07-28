@@ -1,5 +1,8 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+//import "https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css";
+//import 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css';
+
 import { Container, Row, Col } from 'react-bootstrap';
 
 import SentenceCompletionForm from './components/SentenceCompletionForm';
