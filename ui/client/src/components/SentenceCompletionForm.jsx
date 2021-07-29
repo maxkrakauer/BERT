@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, Form, InputGroup, Spinner } from "react-bootstrap";
 import Results from "./Results";
 import MyCheckbox from "./MyCheckbox";
+import "./SentenceCompletionForm.css";
 function SentenceCompletionForm({ lang }) {
   const example =
     lang === "heb"
@@ -69,8 +70,12 @@ function SentenceCompletionForm({ lang }) {
               name="textbox"
               value={sentence}
               onChange={(e) => {
-                setSentence(e.target.value);
-                setMask(e.target.value.split(" ")[0]);
+                const s = e.target.value;
+                const ssplit = s.split(" ");
+                const index = sentence.split(" ").indexOf(mask);
+                const resindex = index >= ssplit.length ? 0 : index;
+                setSentence(s);
+                setMask(ssplit[resindex]);
               }}
               style={{ color: "white" }}
             />
@@ -84,7 +89,10 @@ function SentenceCompletionForm({ lang }) {
               style={{ width: "auto", display: "inline-block", color: "white" }}
               id="masks"
               name="masklist"
-              onChange={(e) => setMask(e.target.value)}
+              onChange={(e) => {
+                setMask(e.currentTarget.value);
+              }}
+              defaultValue={sentence.split(" ")[0]}
             >
               {sentence.split(" ").map((word, index) => (
                 <option key={index} value={word}>
@@ -96,7 +104,6 @@ function SentenceCompletionForm({ lang }) {
             {lang === "heb" ? label_for_mask : null}
           </InputGroup>
           <fieldset disabled={!answered} style={{ display: "inline-block" }}>
-            
             {lang === "heb" ? (
               <MyCheckbox
                 setOriginal={setOriginal}

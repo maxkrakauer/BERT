@@ -1,7 +1,10 @@
 import "./MyCheckbox.css";
 const MyCheckbox = ({ setOriginal, original }) => {
   return (
-    <article class="feature2" style={{border: original ? 'none':'solid'}}>
+    <article
+      className="feature2"
+      style={{ border: original ? "none" : "solid" }}
+    >
       <input
         type="checkbox"
         id="feature2"

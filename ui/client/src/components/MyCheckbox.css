@@ -55,7 +55,13 @@ input {
 input[type="checkbox"]:disabled ~ div {
   border: 1px solid darkgray;
 }
+input[type="checkbox"]:disabled:checked ~ div {
+  border: none;
+}
 
 input[type="checkbox"]:enabled ~ div {
   border: 1px solid white;
+}
+input[type="checkbox"]:enabled:checked ~ div {
+  border: none;
 }
