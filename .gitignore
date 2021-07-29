@@ -3,5 +3,5 @@ Hebrew-Sentiment-Data-main/
 AlephBERT-main/models/.DS_Store
 ui/client/node_modules
 ui/node_modules
-AlephBERT-main/models/myFirstTune/tune_2.pkl
+AlephBERT-main/models/myFirstTune/*.pkl
 AlephBERT-main/data/wikipedia/wikipedia_FT.raw
