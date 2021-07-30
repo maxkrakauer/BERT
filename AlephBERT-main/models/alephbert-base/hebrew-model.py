@@ -27,7 +27,7 @@ if original == "true":
     alephbert = BertForMaskedLM.from_pretrained('onlplab/alephbert-base')
 else:
     alephbert = CPU_Unpickler(
-        open('../AlephBERT-main/models/myFirstTune/tune_6_10.pkl', 'rb')).load()
+        open('../../AlephBERT-main/models/myFirstTune/tune_6_10.pkl', 'rb')).load()
 
 # alephbert = CPU_Unpickler(open('../../models/myFirstTune/tune_2.pkl', 'rb')).load()
 

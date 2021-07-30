@@ -1,14 +1,14 @@
-// server/index.js
-
 const express = require("express");
-const router = express.Router();
 const bodyParser = require('body-parser')
 const PythonShell = require('python-shell')
 
-const PORT = process.env.PORT || 3001;
+const path = require('path');
+const app = express();
+const router = express.Router();
+const PORT = process.env.PORT || 8080;
+
 var ans_en = 'no results yet'
 var ans_heb = 'עדיין אין תוצאות...'
-const app = express();
 
 app.use(bodyParser.json());
 
@@ -26,10 +26,10 @@ app.get("/en", (req, res) => {
 const execute_bert = (lang, text, mask, res, original)=>{
   var scriptPath = '';
   if(lang === 'en'){
-    scriptPath = '../AlephBERT-main/models/alephbert-base/english-model.py'
+    scriptPath = '../../AlephBERT-main/models/alephbert-base/english-model.py'
   }
   else if(lang === 'heb'){
-    scriptPath = '../AlephBERT-main/models/alephbert-base/hebrew-model.py'
+    scriptPath = '../../AlephBERT-main/models/alephbert-base/hebrew-model.py'
   }
   const pyshell = new PythonShell.PythonShell(scriptPath, { args: [text, mask, original] })
   pyshell.on('message', (output) => {
@@ -81,9 +81,16 @@ app.post("/en", (req, res) => {
   return ans_en;
 })
 
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'build')));
+app.get('/ping', function (req, res) {
+ return res.send('pong');
+});
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-
-
+app.listen(PORT, () => {
+    console.log(`Server listening on ${PORT}`);
+  });
+  
