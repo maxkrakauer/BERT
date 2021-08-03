@@ -1,6 +1,6 @@
 import torch
 device = torch.device('cuda')
-
+print(torch.cuda.is_available())
 from transformers import BertForMaskedLM, BertTokenizerFast
 
 from transformers import AdamW
@@ -96,4 +96,4 @@ for epoch in range(epochs):
         loop.set_postfix(loss=loss.item())
 
 import pickle
-pickle.dump(alephbert, open('tune_' + epochs + '.pkl', 'wb'))
+pickle.dump(alephbert, open('tune_' + str(epochs) + '.pkl', 'wb'))
